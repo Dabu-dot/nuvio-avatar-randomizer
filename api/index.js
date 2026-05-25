@@ -1,7 +1,17 @@
 const avatars = [
     "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/Im%20watching%20you.gif",
     "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/Rick.gif",
-    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/SpongeBob.gif"
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/SpongeBob.gif",
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/ChillGuy.gif",
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/ChillingByFire.gif",
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/DoomGuy.gif",
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/Gamer.gif",
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/MultipleFaces.gif",
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/PlagueDoctor.gif",
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/SonicSayz.gif",
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/Spaaaaaaace.gif",
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/Surprised.gif",
+    "https://raw.githubusercontent.com/Dabu-dot/nuvio-avatar-randomizer/refs/heads/main/Avatars/ThatWasEasyRight.gif"
 ];
 
 module.exports = async (req, res) => {
