@@ -42,11 +42,14 @@ module.exports = async (req, res) => {
     const arrayBuffer = await blob.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // 5. En-têtes HTTP anti-cache
+    // 5. En-têtes HTTP anti-cache ultra-agressifs
     res.setHeader('Content-Type', 'image/gif');
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
+
+    // L'astuce magique : un identifiant unique généré à chaque requête
+    res.setHeader('ETag', `W/"${Math.random().toString(36).substring(2)}"`);
 
     // 6. Envoi du fichier binaire
     return res.status(200).send(buffer);
