@@ -1,12 +1,10 @@
 module.exports = async (req, res) => {
   try {
     // 1. On interroge l'API GitHub pour l'historique du dossier 'Avatars'
-    // L'API nous renvoie la liste de tous les fichiers présents dans ce dossier
     const githubApiUrl = "https://api.github.com/repos/Dabu-dot/nuvio-avatar-randomizer/contents/Avatars";
     
     const dirResponse = await fetch(githubApiUrl, {
       headers: {
-        // GitHub demande un User-Agent pour utiliser son API publique
         'User-Agent': 'Vercel-Avatar-Randomizer'
       }
     });
@@ -17,7 +15,7 @@ module.exports = async (req, res) => {
 
     const files = await dirResponse.json();
 
-    // 2. On filtre pour ne garder que les fichiers (au cas où il y a un sous-dossier cachés)
+    // 2. On filtre pour ne garder que les fichiers
     const gifFiles = files.filter(file => file.type === 'file');
 
     if (gifFiles.length === 0) {
@@ -26,33 +24,22 @@ module.exports = async (req, res) => {
 
     // 3. On choisit un fichier au hasard
     const randomFile = gifFiles[Math.floor(Math.random() * gifFiles.length)];
-    
-    // L'API GitHub nous donne directement l'URL brute idéale dans 'download_url'
-    // (Elle gère elle-même les espaces et caractères spéciaux !)
     const randomAvatarUrl = randomFile.download_url;
 
-    // 4. Récupération des données binaires de l'image choisie
-    const response = await fetch(randomAvatarUrl);
-    
-    if (!response.ok) {
-      return res.status(response.status).send(`Erreur téléchargement GIF: ${response.statusText}`);
-    }
+    // --- NOUVELLE LOGIQUE (PISTE 2) ---
 
-    const blob = await response.blob();
-    const arrayBuffer = await blob.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    // 4. On génère une clé aléatoire unique pour détruire le cache (Cache-Busting)
+    const cacheBuster = Math.random().toString(36).substring(2, 10);
+    const finalUrl = `${randomAvatarUrl}?v=${cacheBuster}`;
 
-    // 5. En-têtes HTTP anti-cache ultra-agressifs
-    res.setHeader('Content-Type', 'image/gif');
+    // 5. On configure des en-têtes anti-cache agressifs sur la redirection elle-même
     res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
 
-    // L'astuce magique : un identifiant unique généré à chaque requête
-    res.setHeader('ETag', `W/"${Math.random().toString(36).substring(2)}"`);
-
-    // 6. Envoi du fichier binaire
-    return res.status(200).send(buffer);
+    // 6. On redirige Nuvio instantanément (HTTP 302 Redirection Temporaire)
+    // C'est Nuvio qui va télécharger directement le GIF depuis GitHub avec l'URL modifiée
+    return res.redirect(302, finalUrl);
 
   } catch (error) {
     console.error("Crash de la fonction :", error);
